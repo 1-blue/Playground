@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm run --parallel dev"
+    "dev": "pnpm run --parallel dev",
+    "build": "pnpm run --parallel build",
+    "build:fe": "pnpm run --filter fe build",
+    "build:be": "pnpm run --filter be build",
+    "start": "pnpm run --parallel start",
+    "start:fe": "pnpm run --filter fe start",
+    "start:be": "pnpm run --filter be start"
   },
   "keywords": [],
   "author": "",

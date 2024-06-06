@@ -13,3 +13,9 @@ model Cat {
   age    Int
   gender Boolean @default(true)
 }
+
+model Todo {
+  id        String  @id @default(uuid())
+  title     String  @unique
+  completed Boolean @default(false)
+}
