@@ -1,0 +1,12 @@
+node_modules
+.env
+
+# FE
+.next
+
+# BE
+dist
+
+# ?
+build
+migrations/*
