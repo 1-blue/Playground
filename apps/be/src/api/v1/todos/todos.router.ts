@@ -3,36 +3,44 @@ import { z } from "zod";
 
 import { TrpcService } from "#be/api/v0/trpc/trpc.service";
 import { TodosService } from "#be/api/v1/todos/todos.service";
+import { TODO_TYPE } from "#be/constrants";
 
 @Injectable()
 export class TodosRouter {
   constructor(
-    private readonly trpc: TrpcService,
+    private readonly trpcService: TrpcService,
     private readonly todosService: TodosService,
   ) {}
 
-  router = this.trpc.router({
+  router = this.trpcService.router({
     /** 할일 생성 */
-    create: this.trpc.procedure
+    create: this.trpcService.loggedProcedure
       .input(
         z.object({
           id: z.string().optional(),
           title: z.string(),
-          completed: z.boolean().optional(),
+          type: z.enum(TODO_TYPE).optional(),
         }),
       )
       .mutation(async ({ input }) => await this.todosService.create(input)),
     /** 모든 할일 가져오기 */
-    getAll: this.trpc.procedure.query(
+    getAll: this.trpcService.loggedProcedure.query(
       async () => await this.todosService.findAll(),
     ),
     /** 단일 할일 수정하기 */
-    updateOne: this.trpc.procedure
+    updateOne: this.trpcService.loggedProcedure
       .input(
         z.object({
+          /** 할 일 식별자 */
           id: z.string(),
+          /** 할 일 내용 */
           title: z.string().optional(),
-          completed: z.boolean().optional(),
+          /**
+           * + `TODO`: 할일
+           * + `DOING`: 진행중
+           * + `DONE`: 완료
+           */
+          type: z.enum(TODO_TYPE).optional(),
         }),
       )
       .mutation(
@@ -40,7 +48,7 @@ export class TodosRouter {
           await this.todosService.update({ id: input.id }, input),
       ),
     /** 단일 할일 삭제하기 */
-    deleteOne: this.trpc.procedure
+    deleteOne: this.trpcService.loggedProcedure
       .input(
         z.object({
           id: z.string(),

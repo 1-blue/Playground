@@ -3,8 +3,12 @@ import {
   IsNotEmpty,
   IsUUID,
   IsString,
-  IsBoolean,
+  IsEnum,
 } from "class-validator";
+import { Transform } from "class-transformer";
+import type { TodoType } from "@prisma/client";
+
+import { TODO_TYPE } from "#be/constrants";
 
 export class CreateTodoDto {
   @IsOptional()
@@ -18,6 +22,7 @@ export class CreateTodoDto {
   title: string;
 
   @IsOptional()
-  @IsBoolean({ message: "할일 이름은 불리언 형태만 가능합니다." })
-  gender?: boolean;
+  @IsEnum(TODO_TYPE, { message: "유효하지 않은 할일 유형입니다." })
+  @Transform(({ value }) => value.toUpperCase())
+  type?: TodoType = "TODO";
 }

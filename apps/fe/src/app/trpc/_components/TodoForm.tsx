@@ -23,11 +23,11 @@ const TodoForm = () => {
 
     const id = uuidv4();
 
-    await createMutation.mutateAsync({ id, title });
+    await createMutation.mutateAsync({ id, title, type: "TODO" });
 
     utils.todos.getAll.setData(undefined, (prev) => [
       ...(prev ?? []),
-      { id, title, completed: false },
+      { id, title, type: "TODO" },
     ]);
   };
 

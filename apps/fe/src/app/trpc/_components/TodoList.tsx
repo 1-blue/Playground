@@ -18,7 +18,11 @@ const TodoList = () => {
     id: string;
     title: string;
   }) => {
-    await updateMutation.mutateAsync({ id, title: title + "-수정" });
+    await updateMutation.mutateAsync({
+      id,
+      title: title + "-수정",
+      type: "DOING",
+    });
 
     utils.todos.getAll.setData(undefined, (prev) =>
       prev?.map((todo) =>
@@ -57,6 +61,9 @@ const TodoList = () => {
               key={todo.id}
               className="bg-white dark:border-gray-700 dark:bg-gray-800 w-full *:text-center *:py-2"
             >
+              <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                {todo.type}
+              </Table.Cell>
               <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                 {todo.title}
               </Table.Cell>

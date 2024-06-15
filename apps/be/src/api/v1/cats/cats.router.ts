@@ -7,13 +7,13 @@ import { CatsService } from "#be/api/v1/cats/cats.service";
 @Injectable()
 export class CatsRouter {
   constructor(
-    private readonly trpc: TrpcService,
+    private readonly trpcService: TrpcService,
     private readonly catsService: CatsService,
   ) {}
 
-  router = this.trpc.router({
+  router = this.trpcService.router({
     /** 고양이 생성 */
-    create: this.trpc.procedure
+    create: this.trpcService.publicProcedure
       .input(
         z.object({
           id: z.string().optional(),
@@ -24,7 +24,7 @@ export class CatsRouter {
       )
       .mutation(async ({ input }) => await this.catsService.create(input)),
     /** 단일 고양이 가져오기 */
-    getOne: this.trpc.procedure
+    getOne: this.trpcService.publicProcedure
       .input(
         z.object({
           id: z.string(),
@@ -32,11 +32,11 @@ export class CatsRouter {
       )
       .query(async ({ input }) => await this.catsService.findOne(input)),
     /** 모든 고양이 가져오기 */
-    getAll: this.trpc.procedure.query(
+    getAll: this.trpcService.publicProcedure.query(
       async () => await this.catsService.findAll(),
     ),
     /** 단일 고양이 수정하기 */
-    updateOne: this.trpc.procedure
+    updateOne: this.trpcService.publicProcedure
       .input(
         z.object({
           id: z.string(),
@@ -45,18 +45,18 @@ export class CatsRouter {
           gender: z.boolean().optional(),
         }),
       )
-      .query(
+      .mutation(
         async ({ input }) =>
           await this.catsService.update({ id: input.id }, input),
       ),
     /** 단일 고양이 삭제하기 */
-    deleteOne: this.trpc.procedure
+    deleteOne: this.trpcService.publicProcedure
       .input(
         z.object({
           id: z.string(),
         }),
       )
-      .query(
+      .mutation(
         async ({ input }) => await this.catsService.delete({ id: input.id }),
       ),
   });

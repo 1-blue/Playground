@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TodoType {
+  TODO
+  DOING
+  DONE
+}
+
 model Cat {
   id     String  @id @default(uuid())
   name   String  @unique
@@ -15,7 +21,7 @@ model Cat {
 }
 
 model Todo {
-  id        String  @id @default(uuid())
-  title     String  @unique
-  completed Boolean @default(false)
+  id    String   @id @default(uuid())
+  title String   @unique
+  type  TodoType @default(TODO)
 }
